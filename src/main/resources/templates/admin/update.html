@@ -22,6 +22,22 @@
       <label for="email">Введите новый email</label>
       <input type="email" th:field="*{email}" id="email" class="form-control" required/>
     </div>
+    <div class="form-group">
+      <label for="password">Введите новый пароль</label>
+      <input type="password" th:field="*{password}" id="password" class="form-control" required/>
+    </div>
+    <div class="form-group">
+      <p>
+        <label>Roles:
+          <input type="checkbox" name="roles"
+                 th:each="role : ${allRoles}"
+                 th:text="${role.rolename.replace('ROLE_','')}"
+                 th:value="${role.id}"
+                 th:field="*{roles}"
+          />
+        </label>
+      </p>
+    </div>
     <button type="submit" class="btn btn-primary">Изменить пользователя</button>
   </form>
   <br>

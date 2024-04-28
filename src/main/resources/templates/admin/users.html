@@ -73,15 +73,16 @@
 
         <div/>
         <td>
-          <form action="/edit" method="get">
-            <input type="hidden" username="id" th:value="${user.id}"/>
+          <form th:action="@{/edit/{id}(id=${user.id})}" method="get">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <input type="submit" class="btn" value="Изменить">
           </form>
+
         </td>
         <td>
-          <form th:method="GET" th:action="@{/admin/user/{id}/delete (id=${user.getId()})}">
+          <form th:action="@{/deleteUser/{id}(id=${user.id})}" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-            <input type="submit" class="btn btn-primary" value="Delete">
+            <button type="submit" class="btn btn-delete">Удалить</button>
           </form>
         </td>
       </div>

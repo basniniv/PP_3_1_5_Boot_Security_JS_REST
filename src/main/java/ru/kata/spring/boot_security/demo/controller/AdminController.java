@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.kata.spring.boot_security.demo.model.Role;
@@ -23,14 +24,14 @@ public class AdminController {
         this.userDetService = userDetService;
         this.roleRepository = roleRepository;
     }
-    //*****************************************//users//*******************************************
+    //*****************************************//show all users//*******************************************
     @GetMapping("/admin")
     public String getUsers(Model model) {
         List<User> usersList = userDetService.allUsers();
         model.addAttribute("users", usersList);
         return "admin/users";
     }
-    //**************************************//add//************************************************
+    //**************************************//create//************************************************
 
     @GetMapping("/addUser")
     public String addUserForm(Model model) {
@@ -46,22 +47,24 @@ public class AdminController {
         return "redirect:/login";
     }
     //***************************************//remove//********************************************
-    @PostMapping("/deleteUser")
-    public String deleteUser(@RequestParam("id") long id) {
+    @PostMapping("/deleteUser/{id}")
+    public String deleteUser(@PathVariable("id") long id) {
         userDetService.deleteUser(id);
-        return "redirect:/admin/users";
-
+        return "redirect:/admin/";
     }
+
     //*****************************************//edit//********************************************
-    @GetMapping("/edit")
-    public String updateUserForm(Model model,@RequestParam("id") long id) {
+    @GetMapping("/edit/{id}")
+    public String updateUserForm(Model model, @PathVariable("id") Integer id) {
         model.addAttribute("user", userDetService.getUser(id));
+        List<Role> roles = roleRepository.findAll();
+        model.addAttribute("allRoles", roles);
         return "admin/update";
     }
 
     @PostMapping("/updateUser")
     public String updateUser(@ModelAttribute("user") User user){
         userDetService.updateUser(user);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 }

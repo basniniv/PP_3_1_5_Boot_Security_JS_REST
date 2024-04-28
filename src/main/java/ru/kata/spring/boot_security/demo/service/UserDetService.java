@@ -84,6 +84,7 @@ public class UserDetService implements  UserDetailsService{
 
     @Transactional
     public void updateUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
