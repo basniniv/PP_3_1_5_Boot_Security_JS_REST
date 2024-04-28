@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Изменение пользователя</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+  <h1 class="my-4">Изменение пользователя</h1>
+  <form th:method="POST" th:action="@{/updateUser}" th:object="${user}">
+    <div class="form-group">
+      <input type="hidden" th:field="*{id}"/>
+      <label for="firstName">Введите новое имя</label>
+      <input type="text" th:field="*{username}" id="firstName" class="form-control" required/>
+    </div>
+    <div class="form-group">
+      <label for="lastName">Введите новую фамилию</label>
+      <input type="text" th:field="*{lastName}" id="lastName" class="form-control" required/>
+    </div>
+    <div class="form-group">
+      <label for="email">Введите новый email</label>
+      <input type="email" th:field="*{email}" id="email" class="form-control" required/>
+    </div>
+    <button type="submit" class="btn btn-primary">Изменить пользователя</button>
+  </form>
+  <br>
+  <form th:method="POST" th:action="@{/logout}">
+    <input type="submit" class="btn btn-primary" value="Logout">
+  </form>
+</div>
+</body>
+</html>
