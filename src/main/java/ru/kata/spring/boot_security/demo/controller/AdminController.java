@@ -44,7 +44,7 @@ public class AdminController {
     }
 
     @PostMapping("/addUserToDB")
-    public String addUser(@ModelAttribute("user") @Valid User user, Model model) {
+    public String addUser(@ModelAttribute("user") @Valid User user) {
         userDetService.saveUser(user);
         return "redirect:/login";
     }
