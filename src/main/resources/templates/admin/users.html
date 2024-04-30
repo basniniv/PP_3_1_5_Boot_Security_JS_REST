@@ -8,62 +8,146 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
   <link rel="stylesheet" href="css/main.css" th:href="@{/css/main.css}"/>
-  <title th:text="${user.getId()}">Список пользователей</title>
+  <title>Admin panel</title>
 </head>
 <body>
-<p class="h2 text-center" style="padding-top: 100px">Список пользователей</p>
-<div class="container">
 
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th>#</th>
-      <th>ИМЯ</th>
-      <th>ФАМИЛИЯ</th>
-      <th>ЭЛЕКТРОННАЯ ПОЧТА</th>
-      <th>ПАРОЛЬ</th>
-      <th colspan="2" style="text-align: center">ДЕЙСТВИЯ</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="user : ${users}">
-      <div class="text-uppercase fs-2 text-center">
-        <td th:text="${user.getId()}"></td>
-        <td th:text="${user.getUsername()}"></td>
-        <td th:text="${user.getLastName()}"></td>
-        <td th:text="${user.getEmail()}"></td>
-        <td th:text="${user.getPassword()}"></td>
+<!-- шапка  -->
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <form class="form-inline">
+      <b><span class="navbar-text-xl text-white" th:text="${currentUser.getEmail}"></span></b>
+      <span class="navbar-text-xl text-white">&nbsp with roles: &nbsp</span>
+      <span class="navbar-text-xl text-white" th:each="role : ${currentUser.getRoles()}"
+            th:text="${role.rolename.replace('ROLE_', '')} + '&nbsp'"></span>
+    </form>
 
-        <div/>
-        <td>
-          <form th:action="@{/edit/{id}(id=${user.id})}" method="get">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-            <input type="submit" class="btn" value="Изменить">
-          </form>
+    <ul class="navbar-nav float-lg-right">
+      <li class="nav-item">
+        <a class="nav-link text-muted" th:href="@{/logout}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
-        </td>
-        <td>
-          <form th:action="@{/deleteUser/{id}(id=${user.id})}" method="post">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-            <button type="submit" class="btn btn-delete">Удалить</button>
-          </form>
-        </td>
+
+<div class="container-fluid bg-light">
+
+  <div class="row">
+
+  <!-- left-panel -->
+    <div class="col-2 pt-2">
+      <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+           aria-orientation="vertical">
+        <a class="nav-link active" id="v-pills-admin-tab" data-toggle="pill" href="#v-pills-admin"
+           role="tab" aria-controls="v-pills-admin" aria-selected="true">Admin</a>
+        <a class="nav-link" id="v-pills-user-tab" data-toggle="pill" href="#v-pills-user"
+           role="tab" aria-controls="v-pills-user" aria-selected="false">User</a>
       </div>
-    </tr>
-    </tbody>
-  </table>
-  <br/>
-  <button class="btn btn-primary" onclick="window.location.href = '/addUser'">Добавить пользователя
-  </button>
+    </div>
+    <!-- left-panel -->
 
-  <form th:method="POST" th:action="@{/logout}">
-    <input type="submit" class="btn btn-primary" value="Logout">
-  </form>
+    <!-- Admin panel-->
+    <div class="col-9">
+      <div class="tab-content" id="v-pills-tabContent">
+        <div class="tab-pane fade show active" id="v-pills-admin" role="tabpanel"
+             aria-labelledby="v-pills-admin-tab">
+          <h1>Admin panel</h1>
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Users table</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">New User</a>
+            </li>
+          </ul>
+          <div class="mt-3">
+            <div class="swatch-200">
+              <h3>All users</h3>
+            </div>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>#</th>
+                <th>ИМЯ</th>
+                <th>ФАМИЛИЯ</th>
+                <th>ЭЛЕКТРОННАЯ ПОЧТА</th>
+                <th>РОЛИ</th>
+                <th colspan="2" style="text-align: center">ДЕЙСТВИЯ</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="user : ${users}">
+                <div class="text-uppercase fs-2 text-center">
+                  <td th:text="${user.getId()}"></td>
+                  <td th:text="${user.getUsername()}"></td>
+                  <td th:text="${user.getLastName()}"></td>
+                  <td th:text="${user.getEmail()}"></td>
+                  <td th:text="${#strings.replace(#strings.arrayJoin(user.getRoles(), ', '), 'ROLE_', '')}"></td>
+                  <div/>
+                  <td>
+                    <form th:action="@{/edit/{id}(id=${user.id})}" method="get">
+                      <input type="hidden" th:name="${_csrf.parameterName}"
+                             th:value="${_csrf.token}"/>
+                      <input type="submit" class="btn" value="Изменить">
+                    </form>
+                  </td>
+                  <td>
+                    <form th:action="@{/deleteUser/{id}(id=${user.id})}" method="post">
+                      <input type="hidden" th:name="${_csrf.parameterName}"
+                             th:value="${_csrf.token}"/>
+                      <button type="submit" class="btn btn-delete">Удалить</button>
+                    </form>
+                  </td>
+                </div>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <br/>
+          <button class="btn btn-primary" onclick="window.location.href = '/addUser'">Добавить
+            пользователя
+          </button>
+        </div>
+        <div class="tab-pane fade" id="v-pills-user" role="tabpanel"
+             aria-labelledby="v-pills-user-tab">
+          <h1>User panel</h1>
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">ИМЯ</th>
+              <th scope="col">ФАМИЛИЯ</th>
+              <th scope="col">ПОЧТА</th>
+              <th scope="col">РОЛИ</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <th><p th:text="${currentUser.getId()}">VALUE</p></th>
+              <td><p th:text="${currentUser.getUsername()}">VALUE</p></td>
+              <td><p th:text="${currentUser.getLastName()}">VALUE</p></td>
+              <td><p th:text="${currentUser.getEmail()}">VALUE</p></td>
+              <td th:each="role : ${currentUser.getRoles()}"
+                  th:text="${role.rolename.replace('ROLE_', '&nbsp' )}"></td>
+            </tr>
 
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>

@@ -8,35 +8,81 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
   <link rel="stylesheet" href="css/main.css" th:href="@{/css/main.css}"/>
-  <title th:text="${user.getId()}">Пользователь</title>
+  <title th:text="${currentUser.getId()}">Пользователь</title>
 </head>
 <body>
-<div class="container">
-  <table class="table">
-    <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">ИМЯ</th>
-      <th scope="col">ФАМИЛИЯ</th>
-      <th scope="col">ПОЧТА</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <th><p th:text="${user.getId()}">VALUE</p></th>
-      <td><p th:text="${user.getUsername()}">VALUE</p></td>
-      <td><p th:text="${user.getLastName()}">VALUE</p></td>
-      <td><p th:text="${user.getEmail()}">VALUE</p></td>
-    </tr>
 
-    </tbody>
-  </table>
-  <div class="d-flex gap-2 justify-content-center">
-    <form th:method="POST" th:action="@{/logout}">
-      <input type="submit" class="btn btn-primary" value="Logout">
+<!--            шапка-->
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <form class="form-inline">
+      <b><span class="navbar-text-xl text-white" th:text="${currentUser.getEmail}">Email</span></b>
+      <span class="navbar-text-xl text-white">&nbsp with roles: &nbsp</span>
+      <span class="navbar-text-xl text-white" th:each="role : ${currentUser.getRoles()}"
+            th:text="${role.rolename.replace('ROLE_', '&nbsp' )}"></span>
     </form>
+
+    <ul class="navbar-nav float-lg-right">
+      <li class="nav-item">
+        <a class="nav-link text-muted" th:href="@{/logout}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="container-fluid bg-light">
+  <div class="row">
+
+    <!-- left-panel -->
+    <div class="col-2 pt-2">
+      <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+           aria-orientation="vertical">
+        <a class="nav-link active" id="v-pills-user-tab" data-toggle="pill" href="#v-pills-user" role="tab" aria-controls="v-pills-user" aria-selected="false">User</a>
+      </div>
+    </div>
+    <!-- left-panel -->
+    <div class="col-9">
+      <div class="tab-content" id="v-pills-tabContent">
+        <div class="tab-pane fade show active" id="v-pills-user" role="tabpanel"
+             aria-labelledby="v-pills-user-tab">
+          <h1>User information-page</h1>
+          <div class="mt-3">
+
+            <table class="table table-striped p-2">
+              <div class="p-2">
+                <h3>About user</h3>
+              </div>
+              <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ИМЯ</th>
+                <th scope="col">ФАМИЛИЯ</th>
+                <th scope="col">ПОЧТА</th>
+                <th scope="col">РОЛИ</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <th><p th:text="${currentUser.getId()}">VALUE</p></th>
+                <td><p th:text="${currentUser.getUsername()}">VALUE</p></td>
+                <td><p th:text="${currentUser.getLastName()}">VALUE</p></td>
+                <td><p th:text="${currentUser.getEmail()}">VALUE</p></td>
+                <td><p th:each="role : ${currentUser.getRoles()}"
+                    th:text="${role.rolename.replace('ROLE_', '&nbsp' )}">VALUE</p></td>
+
+
+              </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>

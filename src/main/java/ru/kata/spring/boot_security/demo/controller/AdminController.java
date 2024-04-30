@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+import java.security.Principal;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,9 @@ public class AdminController {
 
     //*****************************************//show all users//*******************************************
     @GetMapping("/admin")
-    public String getUsers(Model model) {
+    public String getUsers(Model model, Principal principal) {
+        User currentUser = userDetService.findByUsername(principal.getName());
+        model.addAttribute("currentUser", currentUser);
         List<User> usersList = userDetService.allUsers();
         model.addAttribute("users", usersList);
         return "admin/users";
@@ -56,7 +59,7 @@ public class AdminController {
         return "redirect:/admin/";
     }
 
-    //*****************************************//edit//********************************************
+    //*****************************************//update//********************************************
     @GetMapping("/edit/{id}")
     public String updateUserForm(Model model, @PathVariable("id") Integer id) {
         model.addAttribute("user", userDetService.getUser(id));
