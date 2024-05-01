@@ -26,16 +26,23 @@ public class AdminController {
         this.roleRepository = roleRepository;
     }
 
-    //*****************************************//show all users//*******************************************
+    //===================/show all users/===================
     @GetMapping("/admin")
     public String getUsers(Model model, Principal principal) {
+        User user = new User();
         User currentUser = userDetService.findByUsername(principal.getName());
-        model.addAttribute("currentUser", currentUser);
         List<User> usersList = userDetService.allUsers();
+        List<Role> roles = roleRepository.findAll();
+        model.addAttribute("user", user);
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("users", usersList);
+        model.addAttribute("allRoles", roles);
+        if(currentUser == null){
+            return "redirect:/login";
+        }
         return "admin/users";
     }
-    //**************************************//create//************************************************
+    //===================/create/====================
 
     @GetMapping("/addUser")
     public String addUserForm(Model model) {
@@ -49,14 +56,15 @@ public class AdminController {
     @PostMapping("/addUserToDB")
     public String addUser(@ModelAttribute("user") @Valid User user) {
         userDetService.saveUser(user);
-        return "redirect:/login";
+        return "redirect:/admin";
     }
 
-    //***************************************//remove//********************************************
+    //===================//remove//====================
     @PostMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable("id") long id) {
         userDetService.deleteUser(id);
-        return "redirect:/admin/";
+
+        return "redirect:/admin";
     }
 
     //*****************************************//update//********************************************

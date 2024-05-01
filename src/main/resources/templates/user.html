@@ -55,11 +55,11 @@
               </div>
               <thead>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">ИМЯ</th>
-                <th scope="col">ФАМИЛИЯ</th>
-                <th scope="col">ПОЧТА</th>
-                <th scope="col">РОЛИ</th>
+                <th scope="col">ID</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Role</th>
               </tr>
               </thead>
               <tbody>
@@ -68,9 +68,9 @@
                 <td><p th:text="${currentUser.getUsername()}">VALUE</p></td>
                 <td><p th:text="${currentUser.getLastName()}">VALUE</p></td>
                 <td><p th:text="${currentUser.getEmail()}">VALUE</p></td>
-                <td><p th:each="role : ${currentUser.getRoles()}"
-                    th:text="${role.rolename.replace('ROLE_', '&nbsp' )}">VALUE</p></td>
-
+<!--                <td><p th:each="role : ${currentUser.getRoles()}"-->
+<!--                    th:text="${role.rolename.replace('ROLE_', '&nbsp' )}">VALUE</p></td>-->
+                <td th:text="${#strings.replace(#strings.arrayJoin(currentUser.getRoles(), ' '), 'ROLE_', '')}"></td>
 
               </tr>
 
