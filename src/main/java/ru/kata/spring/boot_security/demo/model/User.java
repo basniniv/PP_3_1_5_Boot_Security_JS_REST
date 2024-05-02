@@ -15,6 +15,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
@@ -22,7 +24,6 @@ import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 
 @Entity
 @Table(name = "users")
@@ -32,10 +33,16 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+
+
     @Column(name = "username")
     private String username;
     @Column(name = "last_name")
     private String lastName;
+    @Min(value = 18, message = "Возраст должен быть больше 18")
+    @Column (name = "age")
+    private int age;
     @Column(name = "email")
     @Email
     private String email;
@@ -68,7 +75,7 @@ public class User implements UserDetails {
     }
 
     public void setUsername(String firstName) {
-        this.username = firstName;
+        this.username = username;
     }
 
     public String getLastName() {
@@ -77,6 +84,14 @@ public class User implements UserDetails {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getEmail() {
@@ -141,10 +156,10 @@ public class User implements UserDetails {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", age=" + age +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
                 '}';
     }
-
 }

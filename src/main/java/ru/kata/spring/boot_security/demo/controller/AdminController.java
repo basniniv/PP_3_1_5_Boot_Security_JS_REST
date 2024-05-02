@@ -68,20 +68,11 @@ public class AdminController {
 
     }
 
-    //*****************************************//update//********************************************
-//    @PatchMapping("/edit/{id}")
-//    public String updateUserForm(Model model, @PathVariable("id") Integer id) {
-//        model.addAttribute("user", userDetService.getUser(id));
-//        List<Role> roles = roleRepository.findAll();
-//        model.addAttribute("allRoles", roles);
-//        return "admin/update";
-//    }
-
     @PatchMapping("/{id}")
     public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()){
-//            return "/{id}";
-//        }
+        if (bindingResult.hasErrors()){
+            return "/{id}";
+        }
         userDetService.updateUser(user);
         return "redirect:/admin";
     }
