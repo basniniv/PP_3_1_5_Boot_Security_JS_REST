@@ -1,8 +1,8 @@
 
-create table roles
+create table role
 (
     id   bigint primary key auto_increment not null,
-    name varchar(255)
+    rolename varchar(255)
 );
 
 create table users
@@ -29,7 +29,7 @@ INSERT INTO role (id, rolename)
 VALUES (1, 'ROLE_USER'),(2, 'ROLE_ADMIN');
 
 INSERT INTO users (email, last_name, password, username, age)
-VALUES ('basnin.iv@gmail.com', ' basnin', ' $2a$12$.1DVNAsIz06RVEsf1LfFAOgEpIBLhANdaXgLCSjAcS2bVebmb6pVW', ' admin',
+VALUES ('basnin.iv@gmail.com', 'basnin', '$2a$12$YDzcX1BLOn53cTCk/wl8AuCc535nTClkCgw5z9kBkG3B665xMFfRa', 'admin',
         37);
 
 insert into user_role (user_id, role_id)
