@@ -68,8 +68,6 @@
                 <td><p th:text="${currentUser.getUsername()}">VALUE</p></td>
                 <td><p th:text="${currentUser.getLastName()}">VALUE</p></td>
                 <td><p th:text="${currentUser.getEmail()}">VALUE</p></td>
-<!--                <td><p th:each="role : ${currentUser.getRoles()}"-->
-<!--                    th:text="${role.rolename.replace('ROLE_', '&nbsp' )}">VALUE</p></td>-->
                 <td th:text="${#strings.replace(#strings.arrayJoin(currentUser.getRoles(), ' '), 'ROLE_', '')}"></td>
 
               </tr>
