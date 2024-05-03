@@ -1,18 +1,17 @@
-
 create table role
 (
-    id   bigint primary key auto_increment not null,
+    id       bigint primary key auto_increment not null,
     rolename varchar(255)
 );
 
 create table users
 (
-    id       bigint primary key auto_increment not null,
-    email    varchar(255)                      not null,
-    last_name  varchar(255)                    not null,
-    password varchar(255)                      not null,
-    username varchar(255) unique               not null,
-    age      bigint(100)                       not null
+    id        bigint primary key auto_increment not null,
+    email     varchar(255)                      not null,
+    last_name varchar(255)                      not null,
+    password  varchar(255)                      not null,
+    username  varchar(255) unique               not null,
+    age       bigint(100)                       not null
 );
 
 create table user_role
@@ -26,10 +25,16 @@ create table user_role
 );
 
 INSERT INTO role (id, rolename)
-VALUES (1, 'ROLE_USER'),(2, 'ROLE_ADMIN');
+VALUES (1, 'ROLE_USER'),
+       (2, 'ROLE_ADMIN');
+
 
 INSERT INTO users (email, last_name, password, username, age)
-VALUES ('basnin.iv@gmail.com', 'basnin', '$2a$12$YDzcX1BLOn53cTCk/wl8AuCc535nTClkCgw5z9kBkG3B665xMFfRa', 'admin',
+VALUES ('basnin.iv@gmail.com'
+       ,'basnin'
+       ,'$2a$12$YDzcX1BLOn53cTCk/wl8AuCc535nTClkCgw5z9kBkG3B665xMFfRa'
+        # password admin
+       ,'admin',
         37);
 
 insert into user_role (user_id, role_id)
@@ -42,10 +47,10 @@ from users;
 select *
 from user_role;
 
-truncate user_role;
-
-delete
-from users;
-
-alter table users
-    auto_increment = 1;
+# truncate user_role;
+#
+# delete
+# from users;
+#
+# alter table users
+#     auto_increment = 1;
