@@ -30,7 +30,6 @@ public class AdminController {
         this.roleRepository = roleRepository;
     }
 
-    //===================/show all users/===================
     @GetMapping
     public String getUsers(Model model, Principal principal) {
         User currentUser = userDetService.findByUsername(principal.getName());
@@ -50,7 +49,6 @@ public class AdminController {
         }
         return "admin/users";
     }
-    //===================/create/====================
 
     @PostMapping("/addUserToDB")
     public String addUser(@ModelAttribute("user") @Valid User user) {
@@ -59,7 +57,6 @@ public class AdminController {
         return "redirect:/admin/";
     }
 
-    //===================//remove//====================
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable("id") long id) {
         userDetService.deleteUser(id);
