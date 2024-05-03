@@ -298,10 +298,9 @@
                                 <div class="card-body w-25 bg-white mx-auto text-center">
                                     <form th:method="POST" th:action="@{/admin/addUserToDB}" th:object="${user}">
                                         <div class="form-group">
-                                            <label class="font-weight-bold" for="firstName">First name</label>
-                                            <input type="text" th:field="*{username}" id="firstName"
-                                                   class="form-control"
-                                                   required placeholder="First name"/>
+                                            <label class="font-weight-bold" for="userName">Last name</label>
+                                            <input type="text" th:field="*{username}" id="userName" class="form-control"
+                                                   required placeholder="Username"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="font-weight-bold" for="lastName">Last name</label>
@@ -309,7 +308,7 @@
                                                    required placeholder="Last name"/>
                                         </div>
                                         <div class="form-group">
-                                            <label class="font-weight-bold" for="age">Last name</label>
+                                            <label class="font-weight-bold" for="age">Age</label>
                                             <input type="number" th:field="*{age}" id="age" class="form-control"
                                                    required placeholder="Age"/>
                                         </div>

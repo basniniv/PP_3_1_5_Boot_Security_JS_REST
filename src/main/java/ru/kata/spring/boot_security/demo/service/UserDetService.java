@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,12 +24,11 @@ import ru.kata.spring.boot_security.demo.repository.UserRepository;
 @Service
 @Transactional(readOnly = true)
 public class UserDetService implements  UserDetailsService{
+    private static final Logger logger = LoggerFactory.getLogger(UserDetService.class);
     @Autowired
     private final UserRepository userRepository;
     @Autowired
     private final PasswordEncoder passwordEncoder;
-
-
 
     @Autowired
     public UserDetService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -64,6 +66,7 @@ public class UserDetService implements  UserDetailsService{
 
     @Transactional
     public boolean saveUser(User user) {
+        logger.debug("Saving user: {}", user.getUsername());
         User userFromDB = userRepository.findByUsername(user.getUsername());
         if (userFromDB != null) {
             return false;

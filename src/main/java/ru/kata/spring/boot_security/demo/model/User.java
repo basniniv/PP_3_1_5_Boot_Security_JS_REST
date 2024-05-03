@@ -34,10 +34,9 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Long id;
 
-
-
     @Column(name = "username")
     private String username;
+
     @Column(name = "last_name")
     private String lastName;
     @Min(value = 18, message = "Возраст должен быть больше 18")
@@ -74,7 +73,7 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public void setUsername(String firstName) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
