@@ -3,7 +3,7 @@ VALUES (1, 'ROLE_USER'),
        (2, 'ROLE_ADMIN');
 
 
-INSERT INTO users (email, last_name, password, username, age)
+INSERT INTO user (email, last_name, password, username, age)
 VALUES ('basnin.iv@gmail.com'
        ,'basnin'
        ,'$2a$12$YDzcX1BLOn53cTCk/wl8AuCc535nTClkCgw5z9kBkG3B665xMFfRa'
@@ -16,7 +16,7 @@ values (1, 1),
        (1, 2);
 
 select *
-from users;
+from user;
 
 select *
 from user_role;
@@ -24,7 +24,7 @@ from user_role;
 # truncate user_role;
 #
 # delete
-# from users;
+# from user;
 #
-# alter table users
+# alter table user
 #     auto_increment = 1;
