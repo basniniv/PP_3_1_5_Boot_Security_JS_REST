@@ -1,7 +1,9 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +12,6 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UserDetService;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -66,8 +67,10 @@ public class AdminController {
     }
 
     @PostMapping("/updateUser")
-    public String updateUser(@ModelAttribute("user") User user) {
-        userDetService.updateUser(user);
+    public String updateUser(@ModelAttribute("user")@Valid User user, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()){
+            return "admin/update";
+        }
         return "redirect:/admin";
     }
 }

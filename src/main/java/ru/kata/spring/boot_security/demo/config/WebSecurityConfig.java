@@ -17,12 +17,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoderConfig passwordEncoderConfig;
 
 
-
     public WebSecurityConfig(SuccessUserHandler successUserHandler,
-            UserDetService userDetService, PasswordEncoderConfig passwordEncoderConfig) {
+                             UserDetService userDetService, PasswordEncoderConfig passwordEncoderConfig) {
         this.successUserHandler = successUserHandler;
         this.userDetService = userDetService;
-
         this.passwordEncoderConfig = passwordEncoderConfig;
     }
 
@@ -41,6 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .permitAll();
     }
+
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();

@@ -1,10 +1,6 @@
 package ru.kata.spring.boot_security.demo.service;
 
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,14 +14,18 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional(readOnly = true)
-public class UserDetService implements  UserDetailsService{
+public class UserDetService implements UserDetailsService {
     @Autowired
     private final UserRepository userRepository;
     @Autowired
     private final PasswordEncoder passwordEncoder;
-
 
 
     @Autowired
@@ -37,6 +37,7 @@ public class UserDetService implements  UserDetailsService{
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -47,19 +48,25 @@ public class UserDetService implements  UserDetailsService{
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 mapRolesToAuthorities(user.getRoles()));
     }
+
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRolename())).collect(
                 Collectors.toList());
     }
 
 
-    public User findUserById(Long userId){
+    public User findUserById(Long userId) {
         Optional<User> userFromDB = userRepository.findById(userId);
         return userFromDB.orElse(new User());
     }
 
     public List<User> allUsers() {
         return userRepository.findAll();
+    }
+
+    public boolean isUsernameUnique(Long id, String username) {
+        User user = userRepository.findByUsername(username);
+        return user == null || user.getId().equals(id);
     }
 
     @Transactional
@@ -92,9 +99,6 @@ public class UserDetService implements  UserDetailsService{
     public User getUser(long id) {
         return userRepository.findById(id).orElse(null);
     }
-
-
-
 
 
 }
