@@ -1,18 +1,18 @@
 package ru.kata.spring.boot_security.demo.controller;
 
-import java.util.List;
-import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UserDetService;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 
@@ -24,6 +24,7 @@ public class AdminController {
         this.userDetService = userDetService;
         this.roleRepository = roleRepository;
     }
+
     //*****************************************//show all users//*******************************************
     @GetMapping("/admin")
     public String getUsers(Model model) {
@@ -41,11 +42,13 @@ public class AdminController {
         model.addAttribute("allRoles", roles);
         return "admin/addUser";
     }
+
     @PostMapping("/addUserToDB")
-    public String addUser(@ModelAttribute("user") @Valid User user,Model model) {
+    public String addUser(@ModelAttribute("user") @Valid User user, Model model) {
         userDetService.saveUser(user);
         return "redirect:/login";
     }
+
     //***************************************//remove//********************************************
     @PostMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable("id") long id) {
@@ -63,7 +66,7 @@ public class AdminController {
     }
 
     @PostMapping("/updateUser")
-    public String updateUser(@ModelAttribute("user") User user){
+    public String updateUser(@ModelAttribute("user") User user) {
         userDetService.updateUser(user);
         return "redirect:/admin";
     }
