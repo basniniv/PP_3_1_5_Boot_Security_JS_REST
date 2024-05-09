@@ -1,35 +1,36 @@
 package ru.kata.spring.boot_security.demo.controller;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
-import ru.kata.spring.boot_security.demo.service.UserDetService;
+import ru.kata.spring.boot_security.demo.service.RoleService;
+import ru.kata.spring.boot_security.demo.service.UserService;
+
 import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-
 public class AdminController {
-    private final UserDetService userDetService;
+    private final UserService userService;
     private final RoleRepository roleRepository;
+    private final RoleService roleService;
 
-    public AdminController(UserDetService userDetService, RoleRepository roleRepository) {
-        this.userDetService = userDetService;
+
+    public AdminController(UserService userService, RoleRepository roleRepository, RoleService roleService) {
+        this.userService = userService;
         this.roleRepository = roleRepository;
+        this.roleService = roleService;
     }
 
     //*****************************************//show all users//*******************************************
     @GetMapping("/admin")
     public String getUsers(Model model) {
-        List<User> usersList = userDetService.allUsers();
+        List<User> usersList = userService.getUsers();
         model.addAttribute("users", usersList);
         return "admin/users";
     }
@@ -45,32 +46,35 @@ public class AdminController {
     }
 
     @PostMapping("/addUserToDB")
-    public String addUser(@ModelAttribute("user") @Valid User user, Model model) {
-        userDetService.saveUser(user);
+    public String addUser(@ModelAttribute("user") @Valid User user) {
+        userService.saveUser(user);
         return "redirect:/login";
     }
 
     //***************************************//remove//********************************************
     @PostMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable("id") long id) {
-        userDetService.deleteUser(id);
+        userService.deleteUser(id);
         return "redirect:/admin/";
     }
 
     //*****************************************//edit//********************************************
+
     @GetMapping("/edit/{id}")
     public String updateUserForm(Model model, @PathVariable("id") Integer id) {
-        model.addAttribute("user", userDetService.getUser(id));
-        List<Role> roles = roleRepository.findAll();
-        model.addAttribute("allRoles", roles);
+        User user = userService.getUser(id);
+        model.addAttribute("user", user);
+        model.addAttribute("allRoles", roleService.getAll());
         return "admin/update";
     }
 
     @PostMapping("/updateUser")
-    public String updateUser(@ModelAttribute("user")@Valid User user, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()){
+    public String updateUser(@ModelAttribute("user") @Valid User user,
+                             BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             return "admin/update";
         }
+        userService.update(user);
         return "redirect:/admin";
     }
 }

@@ -4,76 +4,76 @@
       rel="stylesheet">
 
 <head>
-  <meta charset="UTF-8">
-  <title th:text="${user.getId()}">Пользователь</title>
+    <meta charset="UTF-8">
+    <title th:text="${user.get().id}">Пользователь</title>
 </head>
 <style>
-  table {
-    width: 80%;
-    margin-top: 20px;
-  }
+    table {
+        width: 80%;
+        margin-top: 20px;
+    }
 
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
 
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
 
-  th {
-    background-color: #4CAF50;
-    color: white;
-  }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
 
-  .btn {
-    background-color: #4CAF50; /* Зеленый */
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-  }
+    .btn {
+        background-color: #4CAF50; /* Зеленый */
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
 
-  .btn-delete {
-    background-color: #f44336; /* Красный */
-  }
+    .btn-delete {
+        background-color: #f44336; /* Красный */
+    }
 
-  .btn:hover {
-    opacity: 0.8;
-  }
+    .btn:hover {
+        opacity: 0.8;
+    }
 </style>
 <body>
 <div class="container">
-  <table class="table">
-    <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">ИМЯ</th>
-      <th scope="col">ФАМИЛИЯ</th>
-      <th scope="col">ПОЧТА</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <th><p th:text="${user.getId()}">VALUE</p></th>
-      <td><p th:text="${user.getUsername()}">VALUE</p></td>
-      <td><p th:text="${user.getLastName()}">VALUE</p></td>
-      <td><p th:text="${user.getEmail()}">VALUE</p></td>
-    </tr>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">ИМЯ</th>
+            <th scope="col">ФАМИЛИЯ</th>
+            <th scope="col">ПОЧТА</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th><p th:text="${user.get().id}">VALUE</p></th>
+            <td><p th:text="${user.get().username}">VALUE</p></td>
+            <td><p th:text="${user.get().lastName}">VALUE</p></td>
+            <td><p th:text="${user.get().email}">VALUE</p></td>
+        </tr>
 
-    </tbody>
-  </table>
-  <div class="d-flex gap-2 justify-content-center">
-    <form th:method="POST" th:action="@{/logout}">
-      <input type="submit" class="btn btn-primary" value="Logout">
-    </form>
-  </div>
+        </tbody>
+    </table>
+    <div class="d-flex gap-2 justify-content-center">
+        <form th:method="POST" th:action="@{/logout}">
+            <input type="submit" class="btn btn-primary" value="Logout">
+        </form>
+    </div>
 </div>
 
 </body>

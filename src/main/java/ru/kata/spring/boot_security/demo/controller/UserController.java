@@ -5,18 +5,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.UserDetService;
+import ru.kata.spring.boot_security.demo.service.UserService;
+
 
 import java.security.Principal;
+import java.util.Optional;
 
 
 @Controller
 public class UserController {
-    UserDetService userDetService;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserDetService userDetService) {
-        this.userDetService = userDetService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+
     }
 
     @GetMapping("/")
@@ -26,11 +29,9 @@ public class UserController {
 
     @GetMapping("user")
     public String getUserInfo(Model model, Principal principal) {
-        User user = userDetService.findByUsername(principal.getName());
+        Optional<User> user = userService.findByUsername(principal.getName());
         model.addAttribute("user", user);
         return "user";
-
     }
-
 
 }
