@@ -56,7 +56,7 @@
                      aria-labelledby="v-pills-admin-tab">
                     <div class="pb-4 pt-4">
 
-                    <h1>Admin panel</h1>
+                        <h1>Admin panel</h1>
                     </div>
 
                     <div>
@@ -356,7 +356,7 @@
                 <div class="tab-pane fade " id="v-pills-user" role="tabpanel"
                      aria-labelledby="v-pills-user-tab">
                     <div class="pt-4 pb-4">
-                    <h1>User information page</h1>
+                        <h1>User information page</h1>
                     </div>
                     <div class="card-header pl-3 border">
                         <h3>About user</h3>
@@ -364,8 +364,6 @@
                     <div class="border w-auto p-3">
                         <table class="table table-striped">
                             <thead>
-
-
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">First Name</th>
@@ -377,21 +375,11 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <th>
-                                    <p th:text="${currentUser.getId()}">VALUE</p>
-                                </th>
-                                <td>
-                                    <p th:text="${currentUser.getUsername()}">VALUE</p>
-                                </td>
-                                <td>
-                                    <p th:text="${currentUser.getLastName()}">VALUE</p>
-                                </td>
-                                <td>
-                                    <p th:text="${currentUser.getAge()}">VALUE</p>
-                                </td>
-                                <td>
-                                    <p th:text="${currentUser.getEmail()}">VALUE</p>
-                                </td>
+                                <th><p th:text="${currentUser.getId()}">VALUE</p></th>
+                                <td><p th:text="${currentUser.getUsername()}">VALUE</p></td>
+                                <td><p th:text="${currentUser.getLastName()}">VALUE</p></td>
+                                <td><p th:text="${currentUser.getAge()}">VALUE</p></td>
+                                <td><p th:text="${currentUser.getEmail()}">VALUE</p></td>
                                 <td th:text="${#strings.replace(#strings.arrayJoin(currentUser.getRoles(), ' '), 'ROLE_', '')}"></td>
                             </tr>
                             </tbody>

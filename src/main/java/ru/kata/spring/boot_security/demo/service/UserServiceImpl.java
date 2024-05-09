@@ -1,28 +1,79 @@
 package ru.kata.spring.boot_security.demo.service;
 
-import java.util.List;
+import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.dao.UserDao;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
-public class UserServiceImpl implements UserService {
-    private UserDao userDao;
-    public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@Transactional(readOnly = true)
+public class UserServiceImpl implements UserDetailsService, UserService {
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
+
     @Override
-    @Transactional(readOnly = true)
-    public List<User> getUsers() {
-        return userDao.getUsers();
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
+
     @Override
-    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> user = findByUsername(username);
+
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException(String.format("User '%s' not found", username));
+        }
+        return user.get();
+    }
+
+
     public User getUser(long id) {
-        return userDao.getUser(id);
+        User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Hibernate.initialize(user.getRoles());
+        return user;
     }
+
     @Override
-    @Transactional
-    public void deleteUser(long id) {
-        userDao.deleteUser(id);
+    public List<User> getUsers() {
+        return userRepository.findAll();
     }
+
+    @Transactional
+    public void saveUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
+
+    @Transactional
+    @Override
+    public void update(User updatedUser) {
+        updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        userRepository.save(updatedUser);
+    }
+
+    @Transactional
+    @Override
+    public void deleteUser(long id) {
+        userRepository.deleteById(id);
+    }
+
+
 }
+

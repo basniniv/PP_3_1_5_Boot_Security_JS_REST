@@ -1,41 +1,43 @@
 package ru.kata.spring.boot_security.demo.controller;
 
-import java.security.Principal;
-import java.util.List;
-import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
-import ru.kata.spring.boot_security.demo.service.UserDetService;
+import ru.kata.spring.boot_security.demo.service.UserService;
+
+import javax.validation.Valid;
+import java.security.Principal;
+import java.util.List;
+import java.util.Optional;
+
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UserDetService userDetService;
+    private final UserService userService;
     private final RoleRepository roleRepository;
 
-    public AdminController(UserDetService userDetService, RoleRepository roleRepository) {
-        this.userDetService = userDetService;
+    public AdminController(UserService userService, RoleRepository roleRepository) {
+        this.userService = userService;
         this.roleRepository = roleRepository;
     }
 
     @GetMapping
     public String getUsers(Model model, Principal principal) {
-        User currentUser = userDetService.findByUsername(principal.getName());
-        model.addAttribute("currentUser", currentUser);
+        Optional<User> currentUser = userService.findByUsername(principal.getName());
+        if (currentUser.isPresent()) {
+            model.addAttribute("currentUser", currentUser.get()); // Получаем значение из Optional
+        } else {
+            // Обрабатываем случай, когда пользователь не найден
+            return "redirect:/login";
+        }
 
-        List<User> usersList = userDetService.allUsers();
+        List<User> usersList = userService.getUsers();
         model.addAttribute("users", usersList);
 
         List<Role> roles = roleRepository.findAll();
@@ -44,22 +46,19 @@ public class AdminController {
         User user = new User();
         model.addAttribute("user", user);
 
-        if(currentUser == null){
-            return "redirect:/login";
-        }
         return "admin/users";
     }
 
     @PostMapping("/addUserToDB")
     public String addUser(@ModelAttribute("user") @Valid User user) {
-        userDetService.saveUser(user);
+        userService.saveUser(user);
 
         return "redirect:/admin/";
     }
 
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable("id") long id) {
-        userDetService.deleteUser(id);
+        userService.deleteUser(id);
 
         return "redirect:/admin/";
 
@@ -70,7 +69,7 @@ public class AdminController {
         if (bindingResult.hasErrors()){
             return "/{id}";
         }
-        userDetService.updateUser(user);
+        userService.update(user);
         return "redirect:/admin";
     }
 }
