@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,10 +51,16 @@ public class AdminController {
     }
 
     @PostMapping("/addUserToDB")
-    public String addUser(@ModelAttribute("user") @Valid User user) {
+    public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+//        if (userService.isUsernameExists(user.getUsername())) {
+//            bindingResult.rejectValue("username", "error.user.username.exists", "Пользователь с таким именем уже существует");
+//        }
+        if(bindingResult.hasErrors()){
+//            model.addAttribute("errorMessage", "Пользователь с таким именем уже существует");
+            return "redirect:/admin";
+        }
         userService.saveUser(user);
-
-        return "redirect:/admin/";
+        return "redirect:/admin";
     }
 
     @DeleteMapping("/{id}")
@@ -66,8 +73,11 @@ public class AdminController {
 
     @PatchMapping("/{id}")
     public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+//        if (userService.isUsernameExists(user.getUsername())) {
+//            bindingResult.rejectValue("username", "error.user.username.exists", "Пользователь с таким именем уже существует");
+//        }
         if (bindingResult.hasErrors()){
-            return "/{id}";
+            return "redirect:/admin";
         }
         userService.update(user);
         return "redirect:/admin";

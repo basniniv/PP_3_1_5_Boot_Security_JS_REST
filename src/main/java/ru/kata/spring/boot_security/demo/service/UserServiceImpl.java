@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
@@ -18,12 +19,14 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserDetailsService, UserService {
+    private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -56,9 +59,20 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Transactional
-    public void saveUser(User user) {
+    public User saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+        return user;
+    }
+
+    @Override
+    public boolean isUsernameExists(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
+    @Override
+    public boolean existsById(long id) {
+        return userRepository.existsById(id);
     }
 
     @Transactional
@@ -73,7 +87,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public void deleteUser(long id) {
         userRepository.deleteById(id);
     }
-
 
 }
 

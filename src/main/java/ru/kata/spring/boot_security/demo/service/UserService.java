@@ -16,5 +16,9 @@ public interface UserService {
 
     void update(User updatedUser);
 
-    void saveUser(User user);
+    User saveUser(User user);
+    public boolean isUsernameExists(String username);
+
+    boolean existsById(long id);
+
 }

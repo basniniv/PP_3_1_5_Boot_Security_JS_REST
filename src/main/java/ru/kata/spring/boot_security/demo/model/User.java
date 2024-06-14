@@ -32,7 +32,7 @@ public class User implements UserDetails {
     private String email;
     @Column(name = "password")
     private String password;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -152,21 +152,18 @@ public class User implements UserDetails {
         User user = (User) o;
 
         if (age != user.age) return false;
-        if (!Objects.equals(id, user.id)) return false;
-        if (!Objects.equals(username, user.username)) return false;
+        if (!id.equals(user.id)) return false;
+        if (!username.equals(user.username)) return false;
         if (!Objects.equals(lastName, user.lastName)) return false;
         if (!Objects.equals(email, user.email)) return false;
-        return Objects.equals(password, user.password);
+        if (!Objects.equals(password, user.password)) return false;
+        return Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        int result = username.hashCode();
         result = 31 * result + age;
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
         return result;
     }
 }
