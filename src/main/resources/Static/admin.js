@@ -67,7 +67,7 @@ async function allUsers() {
                          <td>${user.lastName}</td>
                          <td>${user.age}</td>
                          <td>${user.email}</td>
-                         <td>${user.roles.map(role => " " + role.rolename)}</td>
+                         <td>${user.roles.map(role => " " + role.rolename.replace('ROLE_',''))}</td>
                          <td>
                          <button type="button" class="btn btn-info" data-toggle="modal" id="buttonEdit" data-action="edit" data-id="${user.id}" data-target="#editUserModal">Edit</button>
                          </td>
@@ -86,7 +86,7 @@ async function newUser() {
         .then(roles => {
             roles.forEach((role => {
                 let element = document.createElement("option");
-                element.text = role.rolename;
+                element.text = role.rolename.replace("ROLE_", "");
                 element.value = role.id;
                 $('#rolesNewUser')[0].appendChild(element);
             }))
@@ -193,7 +193,7 @@ async function viewEditModal(id) {
                 }
                 console.log(selectedRole);
                 let element = document.createElement("option");
-                element.text = role.rolename;
+                element.text = role.rolename.replace('ROLE_', '');
                 element.value = role.id;
                 if (selectedRole) element.selected = true;
                 $('#editUserRole')[0].appendChild(element);
@@ -228,7 +228,7 @@ async function viewDeleteModal(id) {
                     console.log(selectedRole)
                 }
                 let element = document.createElement("option");
-                element.text = role.rolename;
+                element.text = role.rolename.replace('ROLE_', '');
                 element.value = role.id;
                 if (selectedRole) element.selected = true;
                 $('#deleteRolesUser')[0].appendChild(element);
